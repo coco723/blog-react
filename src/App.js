@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import PropTypes from 'prop-types';
+import { ConnectedRouter } from 'connected-react-router';
+import { Switch, Route } from 'react-router';
+import routers from './router/index';
+import Layouts from './layouts/index';
 
-function App() {
+const App = ({history}) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ConnectedRouter history={history}>
+      <Switch>
+        <Layouts>
+          {routers.map((v, key) => (
+            <Route
+              component={v.component}
+              exact={v.exact}
+              key={key}
+              path={v.path}
+            />
+          ))}
+        </Layouts>
+      </Switch>
+    </ConnectedRouter>
+  )
+}
+
+App.propTypes = {
+  history: PropTypes.object,
 }
 
 export default App;
