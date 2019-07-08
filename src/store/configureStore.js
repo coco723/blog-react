@@ -1,23 +1,26 @@
-
-import { compose, createStore, applyMiddleware } from 'redux';
-import reducer from './reducers';
-import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
+import { applyMiddleware, compose, createStore } from 'redux';
+import { routerMiddleware } from 'connected-react-router';
+import createRootReducer from './reducers';
 
 export const history = createBrowserHistory();
 
-export const configureStore = (preloadedState) => {
-  const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export default function configureStore(preloadedState) {
+  const composeEnhancer =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   const store = createStore(
-    reducer(history),
+    createRootReducer(history),
     preloadedState,
-    composeEnhancer(applyMiddleware(routerMiddleware(history)))
+    composeEnhancer(applyMiddleware(routerMiddleware(history))),
   );
 
-  if(module.hot) {
+  // Hot reloading
+  if (module.hot) {
+    // Enable Webpack hot module replacement for reducers
     module.hot.accept('./reducers', () => {
-      store.replaceReducer(reducer(history));
+      store.replaceReducer(createRootReducer(history));
     });
   }
+
   return store;
 }

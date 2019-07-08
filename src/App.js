@@ -1,25 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { ConnectedRouter } from 'connected-react-router';
-import { Switch, Route } from 'react-router';
-import routers from './router/index';
-import Layouts from './layouts/index';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { ConnectedRouter } from 'connected-react-router'
+import { Route, Switch } from 'react-router'
+import routers from './router/index.js';
+import Layouts from './layouts/index.js';
 
-const App = ({history}) => {
+const App = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Switch>
         <Layouts>
-          {routers.map((v, key) => (
+          {routers.map((r, key) => (
             <Route
-              component={v.component}
-              exact={v.exact}
+              component={r.component}
+              exact={!!r.exact}
               key={key}
-              path={v.path}
+              path={r.path}
             />
           ))}
         </Layouts>
-      </Switch>
+      </Switch> 
     </ConnectedRouter>
   )
 }
@@ -28,4 +28,5 @@ App.propTypes = {
   history: PropTypes.object,
 }
 
-export default App;
+export default App
+

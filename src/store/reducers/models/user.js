@@ -1,6 +1,8 @@
-import {LOGIN_SUCCESS} from '../../types';
+import {
+  LOGIN_SUCCESS,
+} from '../../types';
 
-const state = {
+const initState = {
   userInfo: {
     avatar: '',
     create_time: '',
@@ -22,7 +24,7 @@ const state = {
 
 
 
-export const user = (action) => {
+export const user = (state = initState,  action) => {
   switch(action.type) {
     case LOGIN_SUCCESS:
       return {

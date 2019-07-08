@@ -5,7 +5,7 @@ import './App.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import {configureStore,  history } from './store/configureStore'
+import configureStore, { history } from './store/configureStore'
 
 const store = configureStore()
 
