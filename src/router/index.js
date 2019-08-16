@@ -12,16 +12,86 @@ const loadingComponent = ({ error, pastDelay }) => {
 } 
 
 const config = [
-  {
-    name: 'articles',
-    path: '/articles',
-    exact: true,
-    component: Loadable({
-      loader: () => import('../components/Article/index'),
-      loading: loadingComponent,
-      delay: 300,
-    }),
-  },
+    {
+      name: '/',
+      path: '/',
+      exact: true,
+      component: Loadable({
+        loader: () => import('../components/Home/index'),
+        loading: loadingComponent,
+        delay: 300,
+      }),
+    },
+    {
+      name: 'articles',
+      path: '/articles',
+      exact: true,
+      component: Loadable({
+        loader: () => import('../pages/Article/index'),
+        loading: loadingComponent,
+        delay: 300,
+      }),
+    },
+    {
+      name: 'hot',
+      path: '/hot',
+      exact: true,
+      component: Loadable({
+        loader: () => import('../pages/Article/article'),
+        loading: loadingComponent,
+        delay: 300,
+      }),
+    },
+    {
+      name: 'archive',
+      path: '/archive',
+      exact: true,
+      component: Loadable({
+        loader: () => import('../pages/Archive/index'),
+        loading: loadingComponent,
+        delay: 300,
+      }),
+    },
+    {
+      name: 'timeLine',
+      path: '/timeLine',
+      exact: true,
+      component: Loadable({
+        loader: () => import('../pages/TimeLine/index'),
+        loading: loadingComponent,
+        delay: 300,
+      }),
+    },
+    {
+      name: 'message',
+      path: '/message',
+      exact: true,
+      component: Loadable({
+        loader: () => import('../pages/Message/index'),
+        loading: loadingComponent,
+        delay: 300,
+      }),
+    },
+    {
+      name: 'articleDetail',
+      path: '/article/:id',
+      exact: true,
+      component: Loadable({
+        loader: () => import('../pages/Article/article'),
+        loading: loadingComponent,
+        delay: 300,
+      }),
+    },
+    {
+      name: 'project',
+      path: '/project',
+      exact: true,
+      component: Loadable({
+        loader: () => import('../pages/project/index'),
+        loading: loadingComponent,
+        delay: 300,
+      }),
+    },
 ];
 
 export default config;
