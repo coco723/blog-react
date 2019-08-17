@@ -33,8 +33,8 @@ const config = [
       }),
     },
     {
-      name: 'hot',
-      path: '/hot',
+      name: 'articleDetail',
+      path: '/article/:id',
       exact: true,
       component: Loadable({
         loader: () => import('../pages/Article/article'),
@@ -68,16 +68,6 @@ const config = [
       exact: true,
       component: Loadable({
         loader: () => import('../pages/Message/index'),
-        loading: loadingComponent,
-        delay: 300,
-      }),
-    },
-    {
-      name: 'articleDetail',
-      path: '/article/:id',
-      exact: true,
-      component: Loadable({
-        loader: () => import('../pages/Article/article'),
         loading: loadingComponent,
         delay: 300,
       }),

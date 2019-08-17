@@ -1,6 +1,5 @@
 import './index.less';
-import logo from '../../assets/profile.jpeg';
-import BiaoChenXuYing from '../../assets/BiaoChenXuYing.png';
+import logo from '../../assets/userLogo.jpeg';
 import React, { Component } from 'react';
 import { Avatar, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -76,14 +75,6 @@ class SliderRight extends Component {
         <div className="tags">
           <div className="title">标签云</div>
           {list}
-        </div>
-        <div className="introduce">
-          <div className="title">本站公众号</div>
-          <div className="content">
-            分享 WEB 全栈开发等相关的技术文章，热点资源<br />
-            全栈程序员的成长之路
-            <img style={{'width':'100%',marginTop: '20px'}} src={BiaoChenXuYing} alt="公众号" />
-          </div>
         </div>
       </div>
     );

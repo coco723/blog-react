@@ -1,5 +1,5 @@
 import './index.less';
-import logo from '../../assets/profile.jpeg';
+import logo from '../../assets/userLogo.jpeg';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -400,7 +400,6 @@ class Index extends Component {
       halfWidth: 0,
       halfHeight: 0,
       halfArray: new Float32Array(3),
-      // and some render targets. see setViewport()
     };
     renderSpec.setSize = function(w, h) {
       renderSpec.width = w;
@@ -548,7 +547,6 @@ class Index extends Component {
       gl.useProgram(null);
     }
 
-    /////
     var projection = {
       angle: 60,
       nearfar: new Float32Array([0.1, 100.0]),
@@ -900,12 +898,6 @@ class Index extends Component {
       return ret;
     }
 
-    // basic usage
-    // useEffect(prog, srctex({'texture':texid, 'dtxArray':(f32)[dtx, dty]})); //basic initialize
-    // gl.uniform**(...); //additional uniforms
-    // drawEffect()
-    // unuseEffect(prog)
-    // TEXTURE0 makes src
     function useEffect(fxobj, srctex) {
       var prog = fxobj.program;
       useShader(prog);
@@ -1072,9 +1064,6 @@ class Index extends Component {
 
       gl.enable(gl.DEPTH_TEST);
     }
-
-    /////
-    // var SceneEnv = {};
     function createScene() {
       createEffectLib();
       createBackground();
@@ -1087,8 +1076,6 @@ class Index extends Component {
       initBackground();
       initPointFlowers();
       initPostProcess();
-
-      //camera.position.z = 17.320508;
       camera.position.z = pointFlower.area.z + projection.nearfar[0];
       projection.angle =
         ((Math.atan2(
@@ -1108,7 +1095,6 @@ class Index extends Component {
     }
 
     function renderScene() {
-      //draw
       Matrix44.loadLookAt(
         camera.matrix,
         camera.position,
@@ -1117,8 +1103,6 @@ class Index extends Component {
       );
 
       gl.enable(gl.DEPTH_TEST);
-
-      //gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       gl.bindFramebuffer(gl.FRAMEBUFFER, renderSpec.mainRT.frameBuffer);
       gl.viewport(0, 0, renderSpec.mainRT.width, renderSpec.mainRT.height);
       gl.clearColor(0.005, 0, 0.05, 0);
@@ -1161,17 +1145,6 @@ class Index extends Component {
     }
 
     var animating = true;
-    // function toggleAnimation(elm) {
-    //   animating ^= true;
-    //   if (animating) animate();
-    //   if (elm) {
-    //     elm.innerHTML = animating ? 'Stop' : 'Start';
-    //   }
-    // }
-
-    // function stepAnimation() {
-    //   if (!animating) animate();
-    // }
 
     function animate() {
       var curdate = new Date();
@@ -1202,28 +1175,7 @@ class Index extends Component {
       canvas.height = fullh;
     }
 
-    // window.addEventListener('load', function(e) {
-    //   var canvas = document.getElementById('sakura');
-    //   try {
-    //     makeCanvasFullScreen(canvas);
-    //     gl = canvas.getContext('experimental-webgl');
-    //   } catch (e) {
-    //     alert('WebGL not supported.' + e);
-    //     console.error(e);
-    //     return;
-    //   }
-
-    //   window.addEventListener('resize', onResize);
-
-    //   setViewports();
-    //   createScene();
-    //   initScene();
-
-    //   timeInfo.start = new Date();
-    //   timeInfo.prev = timeInfo.start;
-    //   animate();
-    // });
-    var canvas = document.getElementById('sakura');
+    const canvas = document.getElementById('sakura');
     try {
       makeCanvasFullScreen(canvas);
       gl = canvas.getContext('experimental-webgl');
@@ -1263,7 +1215,7 @@ class Index extends Component {
         <canvas id="sakura" />
         <div className="content">
           <div className="home-header">
-            <Link className="link" to={`/home`}>
+            <Link className="link" to={`/articles`}>
               <img className="home-logo" src={logo} alt="coco logo" />
             </Link>
           </div>
@@ -1275,11 +1227,13 @@ class Index extends Component {
               <Link className="link" to={`/project`}>
                 项目
               </Link>
+            </div>
+            <div className="list">
               <a
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link"
-                href={`https://github.com/biaochenxuying`}
+                href={`https://github.com/CoCoyh`}
               >
                 github
               </a>
@@ -1287,7 +1241,7 @@ class Index extends Component {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link"
-                href={`https://juejin.im/user/591d6b4d0ce463006926ae40`}
+                href={`https://juejin.im/user/5a4e0a9ff265da35f941d56f`}
               >
                 掘金
               </a>
@@ -1295,7 +1249,7 @@ class Index extends Component {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link"
-                href={`https://www.zhihu.com/people/gu-jian-qi-tan-shui/activities`}
+                href={`https://www.zhihu.com/people/coco-27-59/activities`}
               >
                 知乎
               </a>
@@ -1303,7 +1257,7 @@ class Index extends Component {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link"
-                href={`https://segmentfault.com/u/biaochenxuying`}
+                href={`https://segmentfault.com/u/coco_guo`}
               >
                 segmentfault
               </a>
@@ -1311,13 +1265,12 @@ class Index extends Component {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link"
-                href={`https://www.jianshu.com/u/91717b553bfd`}
+                href={`https://www.jianshu.com/u/235234fb30e4`}
               >
                 简书
               </a>
             </div>
-            {/* <div className="logion"> 加班到天明，学习到昏厥 ！！！ </div> */}
-            <div className="introduce"> 时光正好，未来可期，加油 ！ </div>
+            <div className="introduce"> 路漫漫其修远兮，吾将上下而求索 </div>
           </div>
         </div>
       </div>

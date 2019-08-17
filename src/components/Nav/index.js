@@ -3,25 +3,14 @@ import logo from '../../assets/logo.jpg';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {
-  Layout,
-  Icon,
-  Menu,
-  Row,
-  Col,
-  Button,
-  Drawer,
-  message,
-  Avatar,
-} from 'antd';
-import Register from '../register/register';
-import Login from '../login/login';
+import { Layout, Icon, Menu, Row, Col, Button, Drawer, message, Avatar } from 'antd';
+import Register from '../Register/index';
+import Login from '../Login/index';
 import { isMobile, getQueryStringByName } from '../../utils/utils';
-
 import https from '../../utils/https';
 import urls from '../../utils/urls';
 import { loginSuccess, loginFailure } from '../../store/actions/user';
-import LoadingCom from '../loading/loading';
+import LoadingCom from '../Loading/index';
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -35,7 +24,6 @@ class Nav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMobile: false,
       visible: false,
       placement: 'top',
       current: null,
@@ -47,7 +35,6 @@ class Nav extends Component {
       code: '',
       isLoading: false,
     };
-    this.menuClick = this.menuClick.bind(this);
     this.showLoginModal = this.showLoginModal.bind(this);
     this.showRegisterModal = this.showRegisterModal.bind(this);
     this.handleLoginCancel = this.handleLoginCancel.bind(this);
@@ -60,11 +47,6 @@ class Nav extends Component {
     this.getUser = this.getUser.bind(this);
   }
   componentDidMount() {
-    if (isMobile()) {
-      this.setState({
-        isMobile: true,
-      });
-    }
     const code = getQueryStringByName('code');
     if (code) {
       this.setState(
@@ -219,28 +201,32 @@ class Nav extends Component {
       register: false,
     });
   }
-  menuClick({ key }) {
+  menuClick = (key) => {
     this.setState({
       nav: key,
     });
   }
   render() {
-    let userInfo = '';
-    if (window.sessionStorage.userInfo) {
-      userInfo = JSON.parse(window.sessionStorage.userInfo);
-    }
+    const { placement, visible, login, register, isLoading } = this.state;
+    const userInfo = () => {
+      if (window.sessionStorage.userInfo) {
+        return JSON.parse(window.sessionStorage.userInfo);
+      }
+      return '';
+    }    
 
     return (
       <div className="left">
-        {this.state.isMobile ? (
-          <Header
+        {isMobile() ? (
+          <Header 
             className="header"
             style={{
               position: 'fixed',
               zIndex: 1,
               top: 0,
               width: '100%',
-              height: '64px',
+              minWidth: '1200px',
+              height: '66px',
               float: 'left',
               backgroundColor: 'white',
               borderBottom: '1px solid #eee',
@@ -248,7 +234,7 @@ class Nav extends Component {
           >
             <Row className="container">
               <Col style={{ width: '25%', float: 'left', lineHeight: '64px' }}>
-                <a href="./main.html">
+                <a href="../../../public/main.html">
                   <div className="logo">
                     <img src={logo} alt="" />
                   </div>
@@ -274,7 +260,7 @@ class Nav extends Component {
           </Header>
         ) : (
           <Header
-            className="header "
+            className="header"
             style={{
               position: 'fixed',
               zIndex: 1,
@@ -289,7 +275,7 @@ class Nav extends Component {
           >
             <Row className="container">
               <Col style={{ width: '120px', float: 'left' }}>
-                <a href="./main.html">
+                <a href="../../../public/main.html">
                   <div className="logo ">
                     <img src={logo} alt="" />
                   </div>
@@ -316,12 +302,6 @@ class Nav extends Component {
                       文章
                     </Link>
                   </Menu.Item>
-                  <Menu.Item key="2">
-                    <Link to="/hot">
-                      <Icon type="fire" theme="outlined" />
-                      热门
-                    </Link>
-                  </Menu.Item>
                   <Menu.Item key="8">
                     <Link to="/archive">
                       <Icon type="project" theme="outlined" />
@@ -334,29 +314,15 @@ class Nav extends Component {
                       项目
                     </Link>
                   </Menu.Item>
-                  <Menu.Item key="3">
-                    <Link to="/timeLine">
-                      <Icon type="hourglass" theme="outlined" />
-                      历程
-                    </Link>
-                  </Menu.Item>
                   <Menu.Item key="4">
                     <Link to="/message">
                       <Icon type="message" theme="outlined" />
                       留言
                     </Link>
                   </Menu.Item>
-                  <Menu.Item key="5">
-                    <Link to="/about">
-                      <Icon type="user" theme="outlined" />
-                      关于
-                    </Link>
-                  </Menu.Item>
                 </Menu>
               </Col>
-              <Col
-                style={{ textAlign: 'right', width: '300px', float: 'left' }}
-              >
+              <Col style={{ textAlign: 'right', width: '300px', float: 'left' }}>
                 {userInfo ? (
                   <Menu
                     onClick={this.handleLogout}
@@ -413,10 +379,10 @@ class Nav extends Component {
         )}
 
         <Drawer
-          placement={this.state.placement}
+          placement={placement}
           closable={false}
           onClose={this.onClose}
-          visible={this.state.visible}
+          visible={visible}
           height={420}
         >
           <div className="drawer">
@@ -431,11 +397,6 @@ class Nav extends Component {
               </Link>
             </p>
             <p onClick={this.onClose}>
-              <Link to="/hot">
-                <Icon type="fire" onClick={this.showLoginModal} /> 热门
-              </Link>
-            </p>
-            <p onClick={this.onClose}>
               <Link to="/archive">
                 <Icon type="project" onClick={this.showLoginModal} /> 归档
               </Link>
@@ -446,18 +407,8 @@ class Nav extends Component {
               </Link>
             </p>
             <p onClick={this.onClose}>
-              <Link to="/timeLine">
-                <Icon type="hourglass" onClick={this.showLoginModal} /> 历程
-              </Link>
-            </p>
-            <p onClick={this.onClose}>
               <Link to="/message">
                 <Icon type="message" onClick={this.showLoginModal} /> 留言
-              </Link>
-            </p>
-            <p onClick={this.onClose}>
-              <Link to="/about">
-                <Icon type="user" onClick={this.showLoginModal} /> 关于
               </Link>
             </p>
 
@@ -481,14 +432,14 @@ class Nav extends Component {
           </div>
         </Drawer>
         <Login
-          visible={this.state.login}
+          visible={login}
           handleCancel={this.handleLoginCancel}
         />
         <Register
-          visible={this.state.register}
+          visible={register}
           handleCancel={this.handleRegisterCancel}
         />
-        {this.state.isLoading ? (
+        {isLoading ? (
           <div style={{ marginTop: 100 }}>
             <LoadingCom />
           </div>
