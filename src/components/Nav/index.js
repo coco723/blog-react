@@ -247,7 +247,7 @@ class Nav extends Component {
                   </Menu.Item>
                 </Menu>
               </Col>
-              <Col style={{ textAlign: 'right', width: '300px', float: 'left' }}>
+              <Col style={{ textAlign: 'right', width: '300px', float: 'right' }}>
                 {userInfo() ? (
                   <Menu
                     onClick={this.handleLogout}

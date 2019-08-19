@@ -26,29 +26,35 @@ class Layouts extends Component {
     }
     
     return (
-      <div>
-        {
-          isIndexPage() ? (
-            <Index />
-          ) : (
+      <div className="Layouts">
+        {isIndexPage() ? (
+          <Index />
+        ) : (
+          <div>
+            <Nav pathname={this.props.location.pathname} />
             <Layout className="layout">
-              <Nav pathname ={pathName} />
-              <Layout style={{ marginTop: 30 }}>
-                <Content>
-                  <div style={{ background: '#fff', padding: 24, minHeight: 868 }}>{this.props.children}</div>
-                </Content>
-                {
-                  isShowSlider() ? (
-                    <Sider style={{ backgroundColor: '#fff' }}>
+              <Content style={{ minHeight: 828 }}>
+                <Layout style={{ padding: '24px 0', background: '#fff' }}>
+                  <Content style={{ padding: '0 24px 0 0', minHeight: 280 }}>
+                    {this.props.children}
+                  </Content>
+                  {
+                    isShowSlider() ? (
+                    <Sider width={200} style={{ background: '#fff' }}>
                       <SliderRight />
                     </Sider>
-                  ) : ( '' )
-                }
-              </Layout>
-              <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+                    ) : (
+                      ''
+                    )
+                  }
+                </Layout>
+              </Content>
+              <Footer style={{ textAlign: 'center', background: '#fff' }}>
+                全栈修炼 ©2018 Created by BiaoChenXuYing
+              </Footer>
             </Layout>
-          )
-        }
+          </div>
+        )}
       </div>
     );
   }
