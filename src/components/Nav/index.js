@@ -7,7 +7,7 @@ import { Layout, Icon, Menu, Row, Col, Button, Drawer, message, Avatar } from 'a
 import Register from '../Register/index';
 import Login from '../Login/index';
 import { isMobile, getQueryStringByName } from '../../utils/utils';
-import https from '../../utils/https';
+import request from '../../utils/request';
 import urls from '../../utils/urls';
 import { loginSuccess, loginFailure } from '../../store/actions/user';
 import LoadingCom from '../Loading/index';
@@ -16,10 +16,10 @@ const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
-@connect(
-  state => state.user,
-  { loginSuccess, loginFailure },
-)
+@connect(state => state.user, { 
+  loginSuccess, 
+  loginFailure
+})
 class Nav extends Component {
   constructor(props) {
     super(props);
@@ -35,33 +35,17 @@ class Nav extends Component {
       code: '',
       isLoading: false,
     };
-    this.showLoginModal = this.showLoginModal.bind(this);
-    this.showRegisterModal = this.showRegisterModal.bind(this);
-    this.handleLoginCancel = this.handleLoginCancel.bind(this);
-    this.handleRegisterCancel = this.handleRegisterCancel.bind(this);
-    this.initMenu = this.initMenu.bind(this);
-    this.handleMenu = this.handleMenu.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
-    this.showDrawer = this.showDrawer.bind(this);
-    this.onClose = this.onClose.bind(this);
-    this.getUser = this.getUser.bind(this);
   }
   componentDidMount() {
     const code = getQueryStringByName('code');
+    const { pathname } = this.props;
     if (code) {
-      this.setState(
-        {
-          code,
-        },
-        () => {
-          if (!this.state.code) {
-            return;
-          }
-          this.getUser(this.state.code);
-        },
-      );
+      this.setState({
+        code,
+      })
+      this.getUser(code);
     }
-    this.initMenu(this.props.pathname);
+    this.initMenu(pathname);
   }
 
   showDrawer = () => {
@@ -76,37 +60,38 @@ class Nav extends Component {
     });
   };
 
-  initMenu(name) {
+  initMenu = (name) => {
     let key = '9';
     let navTitle = '';
-    if (name === '/') {
-      key = '9';
-      navTitle = '首页';
-    } else if (name === '/articles') {
-      key = '1';
-      navTitle = '文章';
-    } else if (name === '/hot') {
-      key = '2';
-      navTitle = '热门';
-    } else if (name === '/timeLine') {
-      key = '3';
-      navTitle = '历程';
-    } else if (name === '/message') {
-      key = '4';
-      navTitle = '留言';
-    } else if (name === '/about') {
-      key = '5';
-      navTitle = '关于我';
-    } else if (name === '/articleDetail') {
-      key = '6';
-      navTitle = '文章详情';
-    } else if (name === '/project') {
-      key = '7';
-      navTitle = '项目';
-    } else if (name === '/archive') {
-      key = '8';
-      navTitle = '归档';
+    switch(name) {
+      case '/':
+        key = '9';
+        navTitle = '首页';
+        break;
+      case '/articles':
+        key = '1';
+        navTitle = '文章';
+        break;
+      case '/message': 
+        key = '4';
+        navTitle = '留言';
+        break;
+      case '/articleDetail':
+        key = '6';
+        navTitle = '文章详情';
+        break;
+      case '/project': 
+        key = '7';
+        navTitle = '项目';
+        break;
+      case '/archive':
+        key = '8';
+        navTitle = '归档';
+        break;
+      default:
+        break;
     }
+    
     this.setState({
       navTitle,
       menuCurrent: key,
@@ -117,55 +102,25 @@ class Nav extends Component {
     this.initMenu(nextProps.pathname);
   }
 
-  getUser(code) {
+  getUser = (code) => {
     this.setState({
       isLoading: true,
     });
-    https
-      .post(
-        urls.getUser,
-        {
-          code,
-        },
-        { withCredentials: true },
-      )
-      .then(res => {
-        this.setState({
-          isLoading: false,
-        });
-        if (res.status === 200 && res.data.code === 0) {
-          this.props.loginSuccess(res.data);
-          let userInfo = {
-            _id: res.data.data._id,
-            name: res.data.data.name,
-            avatar: res.data.data.avatar,
-          };
-          window.sessionStorage.userInfo = JSON.stringify(userInfo);
-          message.success(res.data.message, 1);
-          this.handleLoginCancel();
-          // 跳转到之前授权前的页面
-          let preventHistory = JSON.parse(window.sessionStorage.preventHistory);
-          if (preventHistory) {
-            this.props.history.push({
-              pathname: preventHistory.pathname,
-              search: preventHistory.search,
-            });
-          }
-        } else {
-          this.props.loginFailure(res.data.message);
-          message.error(res.data.message, 1);
-        }
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false,
-        });
-        console.log(err);
+    const data = request(urls.getUser, { code });
+    const { _id, name, avatar } = data;
+    window.sessionStorage.userInfo = JSON.stringify({ _id, name, avatar });
+    this.handleLoginCancel();
+    // 跳转到之前授权前的页面
+    const preventHistory = JSON.parse(window.sessionStorage.preventHistory);
+    if (preventHistory) {
+      this.props.history.push({
+        pathname: preventHistory.pathname,
+        search: preventHistory.search,
       });
+    }
   }
 
   handleMenu = e => {
-    // console.log('click ', e);
     this.setState({
       menuCurrent: e.key,
     });
@@ -179,24 +134,24 @@ class Nav extends Component {
     this.onClose();
   };
 
-  showLoginModal() {
+  showLoginModal = () => {
     this.onClose();
     this.setState({
       login: true,
     });
   }
-  showRegisterModal() {
+  showRegisterModal = () => {
     this.onClose();
     this.setState({
       register: true,
     });
   }
-  handleLoginCancel() {
+  handleLoginCancel = () => {
     this.setState({
       login: false,
     });
   }
-  handleRegisterCancel() {
+  handleRegisterCancel = () => {
     this.setState({
       register: false,
     });
@@ -213,24 +168,14 @@ class Nav extends Component {
         return JSON.parse(window.sessionStorage.userInfo);
       }
       return '';
-    }    
+    }
 
     return (
       <div className="left">
-        {isMobile() ? (
+        {
+          isMobile() ? (
           <Header 
-            className="header"
-            style={{
-              position: 'fixed',
-              zIndex: 1,
-              top: 0,
-              width: '100%',
-              minWidth: '1200px',
-              height: '66px',
-              float: 'left',
-              backgroundColor: 'white',
-              borderBottom: '1px solid #eee',
-            }}
+            className="mobile-header"
           >
             <Row className="container">
               <Col style={{ width: '25%', float: 'left', lineHeight: '64px' }}>
@@ -259,28 +204,8 @@ class Nav extends Component {
             </Row>
           </Header>
         ) : (
-          <Header
-            className="header"
-            style={{
-              position: 'fixed',
-              zIndex: 1,
-              top: 0,
-              width: '100%',
-              minWidth: '1200px',
-              height: '66px',
-              float: 'left',
-              backgroundColor: 'white',
-              borderBottom: '1px solid #eee',
-            }}
-          >
+          <Header className="header">
             <Row className="container">
-              <Col style={{ width: '120px', float: 'left' }}>
-                <a href="../../../public/main.html">
-                  <div className="logo ">
-                    <img src={logo} alt="" />
-                  </div>
-                </a>
-              </Col>
               <Col style={{ width: '780px', float: 'left' }}>
                 <Menu
                   theme="light"
@@ -323,7 +248,7 @@ class Nav extends Component {
                 </Menu>
               </Col>
               <Col style={{ textAlign: 'right', width: '300px', float: 'left' }}>
-                {userInfo ? (
+                {userInfo() ? (
                   <Menu
                     onClick={this.handleLogout}
                     style={{
@@ -377,75 +302,15 @@ class Nav extends Component {
             </Row>
           </Header>
         )}
-
-        <Drawer
-          placement={placement}
-          closable={false}
-          onClose={this.onClose}
-          visible={visible}
-          height={420}
-        >
-          <div className="drawer">
-            <p onClick={this.onClose}>
-              <Link to="/">
-                <Icon type="home" /> 首页
-              </Link>
-            </p>
-            <p onClick={this.onClose}>
-              <Link to="/articles">
-                <Icon type="ordered-list" /> 文章
-              </Link>
-            </p>
-            <p onClick={this.onClose}>
-              <Link to="/archive">
-                <Icon type="project" onClick={this.showLoginModal} /> 归档
-              </Link>
-            </p>
-            <p onClick={this.onClose}>
-              <Link to="/project">
-                <Icon type="project" onClick={this.showLoginModal} /> 项目
-              </Link>
-            </p>
-            <p onClick={this.onClose}>
-              <Link to="/message">
-                <Icon type="message" onClick={this.showLoginModal} /> 留言
-              </Link>
-            </p>
-
-            {userInfo ? (
-              <div onClick={this.handleLogout}>
-                <p>{userInfo.name}</p>
-                <p>
-                  <Icon type="logout" /> 退出{' '}
-                </p>
-              </div>
-            ) : (
-              <div>
-                <p onClick={this.showLoginModal}>
-                  <Icon type="login" /> 登录
-                </p>
-                <p onClick={this.showRegisterModal}>
-                  <Icon type="logout" /> 注册{' '}
-                </p>
-              </div>
-            )}
-          </div>
-        </Drawer>
-        <Login
-          visible={login}
-          handleCancel={this.handleLoginCancel}
-        />
-        <Register
-          visible={register}
-          handleCancel={this.handleRegisterCancel}
-        />
-        {isLoading ? (
-          <div style={{ marginTop: 100 }}>
-            <LoadingCom />
-          </div>
-        ) : (
-          ''
-        )}
+        <Login visible={login} handleCancel={this.handleLoginCancel} />
+        <Register visible={register} handleCancel={this.handleRegisterCancel} />
+        {
+          isLoading ? (
+            <div style={{ marginTop: 100 }}>
+              <LoadingCom />
+            </div>
+          ) : ( '' )
+        }
       </div>
     );
   }

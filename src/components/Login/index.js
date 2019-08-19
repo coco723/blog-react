@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Input, Icon, message, Button } from 'antd';
 import { connect } from 'react-redux';
-import https from '../../utils/https';
+import https from '../../utils/request';
 import urls from '../../utils/urls';
 import config from '../../utils/config';
 import { loginSuccess, loginFailure } from '../../store/actions/user';

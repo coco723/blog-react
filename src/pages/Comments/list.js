@@ -1,7 +1,7 @@
 import './index.less';
 import React, { Component } from 'react';
 import { message, Avatar, Spin } from 'antd';
-import https from '../../utils/https';
+import https from '../../utils/request';
 import urls from '../../utils/urls';
 import { timestampToTime } from '../../utils/utils';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';

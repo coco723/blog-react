@@ -3,7 +3,7 @@ import logo from '../../assets/userLogo.jpeg';
 import React, { Component } from 'react';
 import { Avatar, message } from 'antd';
 import { Link } from 'react-router-dom';
-import https from '../../utils/https';
+import request from '../../utils/request';
 import urls from '../../utils/urls';
 
 class SliderRight extends Component {
@@ -18,45 +18,32 @@ class SliderRight extends Component {
       list: [],
       linkList: [],
     };
-    this.handleClick = this.handleClick.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
   }
 
   componentDidMount() {
     this.handleSearch();
-    // this.loadLink();
   }
 
   handleSearch = () => {
-    https
-      .get(urls.getTagList, {
-        params: {
-          keyword: this.state.keyword,
-          pageNum: this.state.pageNum,
-          pageSize: this.state.pageSize,
-        },
-      })
-      .then(res => {
-        if (res.status === 200 && res.data.code === 0) {
-          this.setState({
-            list: res.data.data.list,
-          });
-        } else {
-          message.error(res.data.message);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    const params = {
+      keyword: this.state.keyword,
+      pageNum: this.state.pageNum,
+      pageSize: this.state.pageSize,
+    }
+    const data = request(urls.getTagList, { params });
+    this.setState({
+      list: data.list,
+    });
   };
 
-  handleClick(event) {
+  handleClick = e => {
     this.setState({
       //   [event.target.name]: event.target.value
     });
   }
   render() {
-    const list = this.state.list.map((item, i) => (
+    const { list = [] } = this.state;
+    list.map(item => (
       <Link
         className="item"
         key={item._id}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Input, Icon, message, Button } from 'antd';
 import { connect } from 'react-redux';
 import { registerSuccess, registerFailue } from '../../store/actions/user';
-import https from '../../utils/https';
+import https from '../../utils/request';
 import urls from '../../utils/urls';
 import config from '../../utils/config';
 
@@ -21,9 +21,6 @@ class Register extends Component {
       introduce: '',
       type: 1,
     };
-    this.register = this.register.bind(this);
-    this.handleOk = this.handleOk.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
   register({ email, name, password, phone, introduce, type }) {
     https

@@ -77,7 +77,7 @@ const config = [
       path: '/project',
       exact: true,
       component: Loadable({
-        loader: () => import('../pages/project/index'),
+        loader: () => import('../pages/Project/index'),
         loading: loadingComponent,
         delay: 300,
       }),
