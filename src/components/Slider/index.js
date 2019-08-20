@@ -1,10 +1,10 @@
 import './index.less';
-import logo from '../../assets/userLogo.jpeg';
+import logo from '@/assets/userLogo.jpeg';
 import React, { Component } from 'react';
 import { Avatar } from 'antd';
 import { Link } from 'react-router-dom';
-import request from '../../utils/request';
-import urls from '../../utils/urls';
+import request from '@/utils/request';
+import urls from '@/utils/urls';
 
 class SliderRight extends Component {
   constructor(props) {

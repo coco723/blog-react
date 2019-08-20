@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch } from "react-router";
-import routers from './router/index.js';
-import Layout from './view/index';
+import routers from '@/router/index.js';
+import Layout from '@/view/index';
 
 const App = ({ history }) => {
   return (

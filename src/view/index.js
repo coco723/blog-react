@@ -2,10 +2,10 @@ import './index.less';
 import './mobile.less';
 import React, { Component } from 'react';
 import { Layout } from 'antd';
-import SliderRight from '../components/Slider/index';
-import Nav from '../components/Nav/index';
-import Index from '../components/Home/index';
-import { isMobile } from '../utils/utils';
+import SliderRight from '@/components/Slider/index';
+import Nav from '@/components/Nav/index';
+import Index from '@/components/Home/index';
+import { isMobile } from '@/utils/utils';
 const { Content, Footer, Sider } = Layout;
 
 class Layouts extends Component {
@@ -31,7 +31,7 @@ class Layouts extends Component {
           <Index />
         ) : (
           <div>
-            <Nav pathname={this.props.location.pathname} />
+            <Nav pathname={pathName} />
             <Layout className="layout">
               <Content style={{ minHeight: 828 }}>
                 <Layout style={{ padding: '24px 0', background: '#fff' }}>
@@ -50,7 +50,7 @@ class Layouts extends Component {
                 </Layout>
               </Content>
               <Footer style={{ textAlign: 'center', background: '#fff' }}>
-                全栈修炼 ©2018 Created by BiaoChenXuYing
+                全栈修炼 ©2019 Created by coco
               </Footer>
             </Layout>
           </div>

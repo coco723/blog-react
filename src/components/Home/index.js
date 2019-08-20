@@ -1,5 +1,5 @@
 import './index.less';
-import logo from '../../assets/userLogo.jpeg';
+import logo from '@/assets/userLogo.jpeg';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 

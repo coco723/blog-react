@@ -1,9 +1,9 @@
 import './index.less';
 import React, { Component } from 'react';
 import { message, Avatar, Spin } from 'antd';
-import https from '../../utils/request';
-import urls from '../../utils/urls';
-import { timestampToTime } from '../../utils/utils';
+import https from '@/utils/request';
+import urls from '@/utils/urls';
+import { timestampToTime } from '@/utils/utils';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import ChildrenComment from './childrenComment.js';
 
@@ -39,23 +39,19 @@ class CommentList extends Component {
       cacheTime: 0, // 缓存时间
       times: 0, // 评论次数
     };
-    this.handleAddOtherComment = this.handleAddOtherComment.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.showCommentModal = this.showCommentModal.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
   }
 
-  handleCancel() {
+  handleCancel = () => {
     this.setState({
       visible: false,
     });
   }
 
   // 添加评论
-  showCommentModal(item, secondItem) {
+  showCommentModal = (item, secondItem) => {
     if (!window.sessionStorage.userInfo) {
       message.error('登录才能评论，请先登录！');
-      return false;
+      return;
     }
     // 添加三级评论
     if (secondItem) {
@@ -64,95 +60,91 @@ class CommentList extends Component {
         comment_id: item._id,
         to_user: secondItem.user,
       });
-    } else {
-      // 添加二级评论
-      this.setState({
-        visible: true,
-        comment_id: item._id,
-        to_user: item.user,
-      });
     }
+    // 添加二级评论
+    this.setState({
+      visible: true,
+      comment_id: item._id,
+      to_user: item.user,
+    });
   }
 
-  handleChange(event) {
+  handleChange = (e) => {
     this.setState({
-      [event.target.name]: event.target.value,
+      [e.target.name]: e.target.value,
     });
   }
 
   componentWillMount() {}
 
-  handleAddOtherComment() {
-    if (!this.state.comment_id) {
+  handleAddOtherComment = () => {
+    const { comment_id, times, cacheTime, content, to_user } = this.state;
+    if (!comment_id) {
       message.warning('该父评论不存在！');
       return;
     }
 
-    if (this.state.times > 10) {
+    if (times > 10) {
       message.warning('您今天评论的次数已经用完，明天再来评论吧！', 1);
       return;
     }
 
-    let now = new Date();
-    let nowTime = now.getTime();
-    if (nowTime - this.state.cacheTime < 60000) {
+    const nowTime = new Date().getTime();
+    if (nowTime - cacheTime < 60000) {
       message.warning('您评论太过频繁，1 分钟后再来评论吧！', 1);
       return;
     }
 
-    if (!this.state.content) {
+    if (!content) {
       message.warning('评论内容不能为空!');
       return;
     }
-    let user_id = '';
-    if (window.sessionStorage.userInfo) {
-      let userInfo = JSON.parse(window.sessionStorage.userInfo);
-      user_id = userInfo._id;
-    } else {
+
+    if (!window.sessionStorage.userInfo) {
       message.warning('登录才能评论，请先登录！');
       return;
     }
+    const userInfo = JSON.parse(window.sessionStorage.userInfo);
+    const user_id = userInfo._id;
     this.setState({
       isLoading: true,
     });
-    https
-      .post(
-        urls.addThirdComment,
-        {
-          article_id: this.props.article_id,
-          user_id,
-          comment_id: this.state.comment_id,
-          content: this.state.content,
-          to_user: JSON.stringify(this.state.to_user),
-        },
-        { withCredentials: true },
-      )
-      .then(res => {
-        if (res.status === 200 && res.data.code === 0) {
-          const times = this.state.times + 1
-          this.setState({
-            cacheTime: nowTime,
-            times: times,
-            content: '',
-            visible: false,
-            isLoading: false,
-          });
-          this.props.refreshArticle();
-        } else {
-          message.error(res.data.message);
-        }
-      })
-      .catch(err => {
+    https.post(urls.addThirdComment, {
+      article_id: this.props.article_id,
+      user_id,
+      comment_id,
+      content,
+      to_user: JSON.stringify(to_user),
+    }, { 
+      withCredentials: true
+    }).then(res => {
+      if (res.status === 200 && res.data.code === 0) {
         this.setState({
+          cacheTime: nowTime,
+          times: times + 1,
+          content: '',
           visible: false,
           isLoading: false,
         });
-        console.error(err);
+        this.props.refreshArticle();
+      } else {
+        message.error(res.data.message);
+        return;
+      }
+    }).catch(err => {
+      this.setState({
+        visible: false,
+        isLoading: false,
       });
+      message.error('请求服务错误', 1);
+      return;
+    });
   }
 
   render() {
-    const list = this.props.list.map(item => (
+    const { numbers, list } = this.props;
+    const { isLoading, visible, content } = this.state;
+    const commentList = list.map(item => (
       <ReactCSSTransitionGroup
         key={item.id}
         transitionName="example"
@@ -182,9 +174,6 @@ class CommentList extends Component {
           </div>
           <div className="comment-detail">{item.content}</div>
           <div className="item-comment">
-            {/* <div className="like" >
-							<Avatar size="small" icon="like" /> 赞
-						</div> */}
             <div
               onClick={() => this.showCommentModal(item)}
               className="message"
@@ -192,7 +181,7 @@ class CommentList extends Component {
               <Avatar size="small" icon="message" /> 回复
             </div>
           </div>
-          {item.other_comments.map((e, index) => {
+          {item.other_comments.map((e) => {
             return (
               <div key={e._id} className="item-other">
                 <div className="item-header">
@@ -218,13 +207,7 @@ class CommentList extends Component {
                   {e.to_user.type === 0 ? '(作者)' : ''}：{e.content}
                 </div>
                 <div className="item-comment">
-                  {/* <a className="like">
-										<Avatar size="small" icon="like" /> 赞
-									</a> */}
-                  <div
-                    onClick={() => this.showCommentModal(item, e)}
-                    className="message"
-                  >
+                  <div onClick={this.showCommentModal(item, e)} className="message">
                     <Avatar size="small" icon="message" /> 回复
                   </div>
                 </div>
@@ -238,12 +221,12 @@ class CommentList extends Component {
     return (
       <div className="comment-list">
         <div className="top-title">
-          <span>{this.props.numbers} 条评论</span>
+          <span>{numbers} 条评论</span>
         </div>
-        <Spin spinning={this.state.isLoading}>{list}</Spin>
+        <Spin spinning={isLoading}>{commentList}</Spin>
         <ChildrenComment
-          visible={this.state.visible}
-          content={this.state.content}
+          visible={visible}
+          content={content}
           handleChange={this.handleChange}
           handleOk={this.handleAddOtherComment}
           handleCancel={this.handleCancel}

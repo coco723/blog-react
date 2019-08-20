@@ -29,6 +29,32 @@ export function throttle(fn, delay) {
   };
 }
 
+
+// 用新的throttle包装scroll的会调
+export const lazyload = throttle(() => {
+  // 获取可视区域的高度
+  const viewHight = window.innerHeight || document.documentElement.clientHeight;
+  // 获取所有额图片标签
+  const imgs = document.querySelectorAll('#list .wrap-img img');
+  let num = 0;
+  // 用num统计当前显示到了哪一张图片，避免每一次都从第一张图片开始检查是否露出
+  for (let i = num; i < imgs.length; i++) {
+    // 用可视区域高度减去元素顶部距离可视区域顶部的高度
+    const distance = viewHight - imgs[i].getBoundingClientRect().top;
+    // 如果可视区域高度大于等于元素顶部距离可视区域顶部的高度，说明元素露出
+    if (distance >= 100) {
+      // 给元素写入真实的 src，展示图片
+      const hasLaySrc = imgs[i].getAttribute('data-has-lazy-src');
+      if (hasLaySrc === 'false') {
+        imgs[i].src = imgs[i].getAttribute('data-src');
+        imgs[i].setAttribute('data-has-lazy-src', true);
+      }
+      // 前 i 张图片已经加载完毕，下次从第 i+1 张开始检查是否露出
+      num = i + 1;
+    }
+  }
+}, 1000);
+
 export function setCookie(cName, value, expiredays) {
   if (expiredays > 0 && expiredays !== '100') {
     let exdate = new Date();

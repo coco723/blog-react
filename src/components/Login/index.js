@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, Input, Icon, message, Button } from 'antd';
-import { connect } from 'react-redux';
-import https from '../../utils/request';
-import urls from '../../utils/urls';
-import config from '../../utils/config';
-import { loginSuccess, loginFailure } from '../../store/actions/user';
+import https from '@/utils/request';
+import urls from '@/utils/urls';
+import config from '@/utils/config';
 
-@connect(
-  state => state.user,
-  { loginSuccess, loginFailure },
-)
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -17,9 +11,6 @@ class Login extends Component {
       email: '',
       password: '',
     };
-    this.login = this.login.bind(this);
-    this.handleOk = this.handleOk.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   login({ email, password }) {
@@ -49,30 +40,34 @@ class Login extends Component {
           });
         } else {
           this.props.loginFailure(res.data.message);
-          message.error(res.data.message, 1);
+          message.warn(res.data.message, 1);
         }
       })
       .catch(err => {
         console.log(err);
+        message.error(err, 1);
       });
   }
-  handleOk() {
+
+  handleOk = () => {
     const reg = new RegExp(
       '^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$',
     );
     if (!this.state.email) {
       message.warn('邮箱不能为空！');
-    } else if (!reg.test(this.state.email)) {
+    } 
+    if (!reg.test(this.state.email)) {
       message.warn('请输入格式正确的邮箱！');
-    } else if (!this.state.password) {
+    } 
+    if (!this.state.password) {
       message.warn('密码不能为空');
-    } else {
-      this.login(this.state);
     }
+    this.login(this.state);
   }
-  handleOAuth() {
+  
+  handleOAuth = () => {
     // 保存授权前的页面链接内容
-    let preventHistory = {
+    const preventHistory = {
       pathname: window.location.pathname,
       search: window.location.search,
     };
@@ -82,18 +77,20 @@ class Login extends Component {
       config.client_id
     }&redirect_uri=${config.redirect_uri}`;
   }
-  handleChange(event) {
+  handleChange = (e) => {
     this.setState({
-      [event.target.name]: event.target.value,
+      [e.target.name]: e.target.value,
     });
   }
   render() {
+    const { email, password } = this.state;
+    const { visible, handleCancel } = this.props;
     return (
       <Modal
         title="登录"
         style={{ top: '25%' }}
-        visible={this.props.visible}
-        onCancel={this.props.handleCancel}
+        visible={visible}
+        onCancel={handleCancel}
         width={400}
         footer={null}
       >
@@ -103,7 +100,7 @@ class Login extends Component {
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
             name="email"
             placeholder="email"
-            value={this.state.email}
+            value={email}
             onChange={this.handleChange}
           />
           <Input
@@ -112,7 +109,7 @@ class Login extends Component {
             type="password"
             name="password"
             placeholder="Password"
-            value={this.state.password}
+            value={password}
             onChange={this.handleChange}
           />
         </div>

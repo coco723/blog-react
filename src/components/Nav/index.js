@@ -1,15 +1,14 @@
 import './index.less';
-import logo from '../../assets/logo.jpg';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Layout, Icon, Menu, Row, Col, Button, Avatar } from 'antd';
 import Register from '../Register/index';
 import Login from '../Login/index';
-import { isMobile, getQueryStringByName } from '../../utils/utils';
-import request from '../../utils/request';
-import urls from '../../utils/urls';
-import { loginSuccess, loginFailure } from '../../store/actions/user';
+import { isMobile, getQueryStringByName } from '@/utils/utils';
+import request from '@/utils/request';
+import urls from '@/utils/urls';
+import { loginSuccess, loginFailure } from '@/store/actions/user';
 import LoadingCom from '../Loading/index';
 
 const { Header } = Layout;
@@ -179,9 +178,6 @@ class Nav extends Component {
             <Row className="container">
               <Col style={{ width: '25%', float: 'left', lineHeight: '64px' }}>
                 <a href="../../../public/main.html">
-                  <div className="logo">
-                    <img src={logo} alt="" />
-                  </div>
                 </a>
               </Col>
               <Col style={{ textAlign: 'center', width: '50%', float: 'left' }}>
@@ -205,6 +201,13 @@ class Nav extends Component {
         ) : (
           <Header className="header">
             <Row className="container">
+              {/* <Col style={{ width: '120px', float: 'left' }}>
+                <a href="http://biaochenxuying.cn/main.html">
+                  <div className="logo ">
+                    <h2>可可的博客</h2>
+                  </div>
+                </a>
+              </Col> */}
               <Col style={{ width: '780px', float: 'left' }}>
                 <Menu
                   theme="light"

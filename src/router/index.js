@@ -17,7 +17,7 @@ const config = [
       path: '/',
       exact: true,
       component: Loadable({
-        loader: () => import('../components/Home/index'),
+        loader: () => import('@/components/Home/index'),
         loading: loadingComponent,
         delay: 300,
       }),
@@ -27,7 +27,7 @@ const config = [
       path: '/articles',
       exact: true,
       component: Loadable({
-        loader: () => import('../pages/Article/index'),
+        loader: () => import('@/pages/Article/index'),
         loading: loadingComponent,
         delay: 300,
       }),
@@ -37,7 +37,7 @@ const config = [
       path: '/article/:id',
       exact: true,
       component: Loadable({
-        loader: () => import('../pages/Article/article'),
+        loader: () => import('@/pages/Article/article'),
         loading: loadingComponent,
         delay: 300,
       }),
@@ -47,17 +47,7 @@ const config = [
       path: '/archive',
       exact: true,
       component: Loadable({
-        loader: () => import('../pages/Archive/index'),
-        loading: loadingComponent,
-        delay: 300,
-      }),
-    },
-    {
-      name: 'timeLine',
-      path: '/timeLine',
-      exact: true,
-      component: Loadable({
-        loader: () => import('../pages/TimeLine/index'),
+        loader: () => import('@/pages/Archive/index'),
         loading: loadingComponent,
         delay: 300,
       }),
@@ -67,7 +57,7 @@ const config = [
       path: '/message',
       exact: true,
       component: Loadable({
-        loader: () => import('../pages/Message/index'),
+        loader: () => import('@/pages/Message/index'),
         loading: loadingComponent,
         delay: 300,
       }),
@@ -77,7 +67,7 @@ const config = [
       path: '/project',
       exact: true,
       component: Loadable({
-        loader: () => import('../pages/Project/index'),
+        loader: () => import('@/pages/Project/index'),
         loading: loadingComponent,
         delay: 300,
       }),
