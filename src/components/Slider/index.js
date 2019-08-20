@@ -1,7 +1,7 @@
 import './index.less';
 import logo from '../../assets/userLogo.jpeg';
 import React, { Component } from 'react';
-import { Avatar, message } from 'antd';
+import { Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import request from '../../utils/request';
 import urls from '../../utils/urls';

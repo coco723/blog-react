@@ -1,12 +1,12 @@
 import './index.less';
 import './mobile.less';
 import React, { Component } from 'react';
-import { Layout, BackTop, Menu, Breadcrumb } from 'antd';
+import { Layout } from 'antd';
 import SliderRight from '../components/Slider/index';
 import Nav from '../components/Nav/index';
 import Index from '../components/Home/index';
 import { isMobile } from '../utils/utils';
-const { Content, Footer, Sider , Header} = Layout;
+const { Content, Footer, Sider } = Layout;
 
 class Layouts extends Component {
   render() {

@@ -3,7 +3,7 @@ import logo from '../../assets/logo.jpg';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Layout, Icon, Menu, Row, Col, Button, Drawer, message, Avatar } from 'antd';
+import { Layout, Icon, Menu, Row, Col, Button, Avatar } from 'antd';
 import Register from '../Register/index';
 import Login from '../Login/index';
 import { isMobile, getQueryStringByName } from '../../utils/utils';
@@ -25,7 +25,6 @@ class Nav extends Component {
     super(props);
     this.state = {
       visible: false,
-      placement: 'top',
       current: null,
       menuCurrent: '',
       login: false,
@@ -162,7 +161,7 @@ class Nav extends Component {
     });
   }
   render() {
-    const { placement, visible, login, register, isLoading } = this.state;
+    const { login, register, isLoading } = this.state;
     const userInfo = () => {
       if (window.sessionStorage.userInfo) {
         return JSON.parse(window.sessionStorage.userInfo);
