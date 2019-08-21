@@ -55,9 +55,15 @@ class Project extends Component {
         })
       } else {
         message.error(res.data.message, 1);
+        this.setState({
+          isLoading: false,
+        })
       }
     }).catch(err => {
       console.error(`请求服务期错误： ${err}`);
+      this.setState({
+        isLoading: false,
+      })
     })
   }
 

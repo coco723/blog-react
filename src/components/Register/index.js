@@ -17,28 +17,22 @@ class Register extends Component {
     };
   }
 
-  register({ email, name, password, phone, introduce, type }) {
+  register() {
+    const { email, name, password, phone, introduce, type } = this.state;
     https.post(urls.register, {
-      email,
-      name,
-      password,
-      phone,
-      introduce,
-      type,
+      email, name, password, phone, introduce, type
     }).then(res => {
+      this.setState({
+        email: '',
+        name: '',
+        password: '',
+        phone: '',
+        introduce: '',
+      });
       if (res.status === 200 && res.data.code === 0) {
-        this.props.registerSuccess(res.data.data);
         this.props.handleCancel();
         message.success('注册成功, 请登录~', 1);
-        this.setState({
-          email: '',
-          name: '',
-          password: '',
-          phone: '',
-          introduce: '',
-        });
       } else {
-        this.props.registerFailue(res.data.message);
         message.error(res.data.message, 1);
       }
     }).catch(err => {

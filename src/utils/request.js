@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { message } from 'antd';
 
 let service = null;
 if (process.env.NODE_ENV === 'development') {
@@ -29,10 +28,11 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     console.log('response = ', response);
-    if (response.status === 200 && response.data.code === 0) {
-      return response.data.data;
-    }
-    message.error(response.data.message);
+    // if (response.status === 200 && response.data.code === 0) {
+    //   return response.data.data;
+    // }
+    // message.error(response.data.message);
+    return response;
   },
   error => {
     console.error('interceptors response with error:' + error); // for debug

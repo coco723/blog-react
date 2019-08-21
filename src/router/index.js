@@ -72,10 +72,6 @@ const config = [
         delay: 300,
       }),
     },
-    {
-      exact: true,
-      render: () => <div>404 Not Found</div>
-    },
 ];
 
 export default config;

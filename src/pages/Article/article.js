@@ -52,7 +52,7 @@ class ArticleDetail extends Component {
     document.getElementById('description').setAttribute('content', '全栈修炼');
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const article_id = getQueryStringByName('article_id');
     this.handleSearch(article_id);
   }
@@ -67,6 +67,9 @@ class ArticleDetail extends Component {
     }, {
       withCredentials: true,
     }).then(res => {
+      this.setState({
+        isLoading: false,
+      })
       if (res.status === 200 && res.data.code === 0) {
         const data = res.data.data;
         const articlemd = markdown.marked(data.content);
@@ -75,7 +78,6 @@ class ArticleDetail extends Component {
           data.toc = md.toc;
           this.setState({
             info: data,
-            isLoading: false,
           });
         });
         const keyword = data.keyword.join(',');
@@ -88,6 +90,10 @@ class ArticleDetail extends Component {
       }
     }).catch (err => {
       console.log(err);
+      this.setState({
+        isLoading: false,
+      });
+      message.error('请求服务错误', 1);
     })
   }
 
@@ -105,13 +111,18 @@ class ArticleDetail extends Component {
           isLoading: false,
           info,
         });
-        message.success(res.data.message, 1);
       } else {
+        this.setState({
+          isLoading: false
+        })
         message.warning(res.data.message, 1);
       }
     })
     .catch(err => {
       console.log(err);
+      this.setState({
+        isLoading: false,
+      })
       message.error(err, 1);
     });
   }
@@ -237,7 +248,7 @@ class ArticleDetail extends Component {
                 </div>
               </div>
               <div className="tags" title="标签">
-                <Icon type="tags" theme="outlined" />{tagList}
+                <Icon type="tags" theme="twoTone" />{tagList}
               </div>
               <span className="clearfix" />
             </div>

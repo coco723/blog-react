@@ -9,6 +9,10 @@ import { isMobile } from '@/utils/utils';
 const { Content, Footer, Sider } = Layout;
 
 class Layouts extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
     const pathName = this.props.location.pathname;
     const isShowSlider = () => {

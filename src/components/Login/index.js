@@ -13,40 +13,34 @@ class Login extends Component {
     };
   }
 
-  login({ email, password }) {
-    https
-      .post(
-        urls.login,
-        {
-          email,
-          password,
-        },
-        { withCredentials: true },
-      )
-      .then(res => {
-        if (res.status === 200 && res.data.code === 0) {
-          this.props.loginSuccess(res.data);
-          let userInfo = {
-            _id: res.data.data._id,
-            name: res.data.data.name,
-            avatar: res.data.data.avatar,
-          };
-          window.sessionStorage.userInfo = JSON.stringify(userInfo);
-          message.success(res.data.message, 1);
-          this.props.handleCancel();
-          this.setState({
-            email: '',
-            password: '',
-          });
-        } else {
-          this.props.loginFailure(res.data.message);
-          message.warn(res.data.message, 1);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        message.error(err, 1);
+  login() {
+    const { email, password } = this.state;
+    https.post(urls.login, {
+      email,
+      password,
+    },{ 
+      withCredentials: true 
+    }).then(res => {
+      this.setState({
+        email: '',
+        password: '',
       });
+      if (res.status === 200 && res.data.code === 0) {
+        const { _id, name, avatar } = res.data.data;
+        const userInfo = { _id, name, avatar };
+        window.sessionStorage.userInfo = JSON.stringify(userInfo);
+        this.props.handleCancel();
+      } else {
+        message.error(res.data.message, 1);
+      }
+    }).catch(err => {
+      console.log(err);
+      this.setState({
+        email: '',
+        password: '',
+      });
+      message.error(err, 1);
+    });
   }
 
   handleOk = () => {

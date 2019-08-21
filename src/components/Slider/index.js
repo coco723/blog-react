@@ -38,7 +38,7 @@ class SliderRight extends Component {
 
   handleClick = e => {
     this.setState({
-      //   [event.target.name]: event.target.value
+      [e.target.name]: e.target.value
     });
   }
   render() {

@@ -29,7 +29,7 @@ class Archive extends Component {
 
   handleSearch = () => {
     this.setState({
-        isLoading: true,
+      isLoading: true,
     });
     const { state, keyword, pageNum, pageSize, article, total, list } = this.state;
     https.get(urls.getArticleList, {
@@ -39,11 +39,11 @@ class Archive extends Component {
     }).then(res => {
       if (res.status === 200 && res.data.code === 0) {
         const data = res.data.data;
-        let num = pageNum;
+        const num = pageNum + 1;
         this.setState({
             list: list.concat(data.list),
             total: data.count,
-            pageNum: ++num,
+            pageNum: num,
             isLoading: false,
         });
         if (total === list.length) {
@@ -55,13 +55,15 @@ class Archive extends Component {
         message.error(res.data.message);
       }
     }).catch(err => {
-      console.log(err);
-      message.error(err, 1);
+      console.log(`请求服务错误：${err}`);
+      this.setState({
+        isLoading: false,
+      })
     });
   };
 
   render() {
-    const list = this.state.list.map((item, i) => (
+    const list = this.state.list.map((item, i) => 
       <Timeline.Item 
         key = { i }
         color = { 'red' }
@@ -70,33 +72,30 @@ class Archive extends Component {
         }
       >
         <h1> { item.year } </h1> 
-        {item.list.map(ele => {
+        { item.list.length > 0 ? item.list.map(article => {
           return ( 
-            <Timeline key = { ele._id } >
+            <Timeline key = {article._id} >
               <Timeline.Item>
-                <Link 
-                  className = "title"
+                <Link
                   target = "_blank"
-                  to = { `/articleDetail?article_id=${ele._id}` }
+                  to = {`/articleDetail?article_id=${article._id}`}
                 >
-                  <h3> { ele.title } </h3>
+                  <h3> {article.title} </h3>
                 </Link> 
                 <p>
-                  <span>{ele.create_time ? timestampToTime(ele.create_time, true) : ''}</span>
+                  <span>{article.create_time ? timestampToTime(article.create_time, true) : ''}</span>
                 </p> 
               </Timeline.Item>
             </Timeline>
           );
-        })}
+        }) : ('')}
       </Timeline.Item>
-    ));
+    );
 
     return (
       <div className = "archive">
-        <Timeline> { list } </Timeline> 
-        { 
-          this.state.isLoading ? <Loading /> : ('')
-        } 
+        {this.state.list.length > 0? (<Timeline>{ list }</Timeline> ) : ('')}
+        {this.state.isLoading ? <Loading /> : ('')} 
       </div>
     );
   }

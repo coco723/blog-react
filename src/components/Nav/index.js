@@ -1,24 +1,18 @@
 import './index.less';
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Layout, Icon, Menu, Row, Col, Button, Avatar } from 'antd';
+import { Layout, Icon, Menu, Row, Col, Button, Avatar, message } from 'antd';
 import Register from '../Register/index';
 import Login from '../Login/index';
 import { isMobile, getQueryStringByName } from '@/utils/utils';
-import request from '@/utils/request';
+import https from '@/utils/request';
 import urls from '@/utils/urls';
-import { loginSuccess, loginFailure } from '@/store/actions/user';
 import Loading from '../Loading/index';
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
-@connect(state => state.user, { 
-  loginSuccess, 
-  loginFailure
-})
 class Nav extends Component {
   constructor(props) {
     super(props);
@@ -96,26 +90,45 @@ class Nav extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.initMenu(nextProps.pathname);
   }
 
-  getUser = (code) => {
+  getUser(code) {
     this.setState({
       isLoading: true,
     });
-    const data = request(urls.getUser, { code });
-    const { _id, name, avatar } = data;
-    window.sessionStorage.userInfo = JSON.stringify({ _id, name, avatar });
-    this.handleLoginCancel();
-    // 跳转到之前授权前的页面
-    const preventHistory = JSON.parse(window.sessionStorage.preventHistory);
-    if (preventHistory) {
-      this.props.history.push({
-        pathname: preventHistory.pathname,
-        search: preventHistory.search,
+    https.post(urls.getUser, {
+      code,
+    },{ 
+      withCredentials: true 
+    }).then(res => {
+      this.setState({
+        isLoading: false,
       });
-    }
+      if (res.status === 200 && res.data.code === 0) {
+        const { _id, name, avatar } = res.data.data;
+        const userInfo = { _id, name, avatar };
+        window.sessionStorage.userInfo = JSON.stringify(userInfo);
+        this.handleLoginCancel();
+        // 跳转到之前授权前的页面
+        let preventHistory = JSON.parse(window.sessionStorage.preventHistory);
+        if (preventHistory) {
+          this.props.history.push({
+            pathname: preventHistory.pathname,
+            search: preventHistory.search,
+          });
+        }
+      } else {
+        message.error(res.data.message, 1);
+      }
+    }).catch(err => {
+      this.setState({
+        isLoading: false,
+      });
+      console.log(`服务期请求错误: ${err}`);
+      message.error(JSON.stringify(err), 1);
+    });
   }
 
   handleMenu = e => {
@@ -219,31 +232,31 @@ class Nav extends Component {
                 >
                   <Menu.Item key="9">
                     <Link to="/home">
-                      <Icon type="home" theme="outlined" />
+                      <Icon type="home" theme="twoTone" />
                       首页
                     </Link>
                   </Menu.Item>
                   <Menu.Item key="1">
                     <Link to="/articles">
-                      <Icon type="ordered-list" theme="outlined" />
+                      <Icon type="file-text" theme="twoTone" />
                       文章
                     </Link>
                   </Menu.Item>
                   <Menu.Item key="8">
                     <Link to="/archive">
-                      <Icon type="project" theme="outlined" />
+                      <Icon type="project" theme="twoTone" />
                       归档
                     </Link>
                   </Menu.Item>
                   <Menu.Item key="7">
                     <Link to="/project">
-                      <Icon type="database" theme="outlined" />
+                      <Icon type="database" theme="twoTone" />
                       项目
                     </Link>
                   </Menu.Item>
                   <Menu.Item key="4">
                     <Link to="/message">
-                      <Icon type="message" theme="outlined" />
+                      <Icon type="message" theme="twoTone" />
                       留言
                     </Link>
                   </Menu.Item>

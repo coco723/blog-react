@@ -19,7 +19,7 @@ class CommentList extends Component {
       articleDetail: {
         _id: '',
         content: '',
-        author: 'biaochenxuying',
+        author: 'coco',
         category: [],
         comments: [],
         create_time: '',
@@ -75,10 +75,47 @@ class CommentList extends Component {
     });
   }
 
-  componentWillMount() {}
+  addComment(user_id) {
+    this.setState({
+      isLoading: true,
+    });
+    const { comment_id, content, to_user, times} = this.state;
+    https.post(urls.addThirdComment, {
+      article_id: this.props.article_id,
+      user_id,
+      comment_id,
+      content,
+      to_user: JSON.stringify(to_user),
+    }, { 
+      withCredentials: true
+    }).then(res => {
+      this.setState({
+        visible: false,
+        isLoading: false,
+      });
+      if (res.status === 200 && res.data.code === 0) {
+        const nowTime = new Date().getTime();
+        this.setState({
+          cacheTime: nowTime,
+          times: times + 1,
+          content: '',
+        });
+        this.props.refreshArticle();
+      } else {
+        message.error(res.data.message);
+        return;
+      }
+    }).catch(err => {
+      this.setState({
+        visible: false,
+        isLoading: false,
+      });
+      message.error('请求服务错误', 1);
+    });
+  }
 
   handleAddOtherComment = () => {
-    const { comment_id, times, cacheTime, content, to_user } = this.state;
+    const { comment_id, times, cacheTime, content } = this.state;
     if (!comment_id) {
       message.warning('该父评论不存在！');
       return;
@@ -106,39 +143,7 @@ class CommentList extends Component {
     }
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
     const user_id = userInfo._id;
-    this.setState({
-      isLoading: true,
-    });
-    https.post(urls.addThirdComment, {
-      article_id: this.props.article_id,
-      user_id,
-      comment_id,
-      content,
-      to_user: JSON.stringify(to_user),
-    }, { 
-      withCredentials: true
-    }).then(res => {
-      if (res.status === 200 && res.data.code === 0) {
-        this.setState({
-          cacheTime: nowTime,
-          times: times + 1,
-          content: '',
-          visible: false,
-          isLoading: false,
-        });
-        this.props.refreshArticle();
-      } else {
-        message.error(res.data.message);
-        return;
-      }
-    }).catch(err => {
-      this.setState({
-        visible: false,
-        isLoading: false,
-      });
-      message.error('请求服务错误', 1);
-      return;
-    });
+    this.addComment(user_id);
   }
 
   render() {

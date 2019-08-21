@@ -4,7 +4,7 @@ import Loading from '@/components/Loading/index';
 import https from '@/utils/request';
 import urls from '@/utils/urls';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { message, Icon } from 'antd';
+import { Icon, message } from 'antd';
 import { Link } from 'react-router-dom';
 import './index.less';
 import LoadEnd from '@/components/LoadEnd';
@@ -56,13 +56,15 @@ class Articles extends Component {
     }, {
       withCredentials: true,
     }).then(res => {
-      let num = pageNum;
+      const num = pageNum + 1;
+      this.setState({
+        isLoading: false,
+      })
       if (res.status === 200 && res.data.code === 0) {
         this.setState(state => ({
           list: [...state.list, ...res.data.data.list],
           total: res.data.data.count,
-          pageNum: ++num,
-          isLoading: false,
+          pageNum: num,
         }));
         if (this.state.total === this.state.list.length) {
           this.setState({
@@ -72,7 +74,11 @@ class Articles extends Component {
         lazyload();
       }
     }).catch(error => {
-      message.error(`加载数据错误: ${error}`);
+      console.error(`服务请求错误: ${error}`);
+      this.setState({
+        isLoading: false,
+      });
+      message.error(`服务请求错误: ${error}`, 1);
     })
   }
 
@@ -95,13 +101,13 @@ class Articles extends Component {
             <p className='abstract'>{item.desc}</p>
             <div className="meta">
               <Link rel="noopener noreferrer" to={link}>
-                <Icon type="eye" theme="outlined" /> {item.meta.views}
+                <Icon type="eye" theme="twoTone" /> {item.meta.views}
               </Link>{' '}
               <Link target="_blank" to={link}>
-                <Icon type="message" theme="outlined" /> {item.meta.comments}
+                <Icon type="message" theme="twoTone" /> {item.meta.comments}
               </Link>{''}
               <Link target="_blank" to={link}>
-                <Icon type="like" theme="outlined" /> {item.meta.likes}
+                <Icon type="like" theme="twoTone" /> {item.meta.likes}
               </Link>
               <span className="time">
                 {item.create_time ? timestampToTime(item.create_time, true) : ''}

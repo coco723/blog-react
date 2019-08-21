@@ -1,5 +1,6 @@
 import {
   LOGIN_SUCCESS,
+  LOGIN_FAILURE
 } from '../../types';
 
 const initState = {
@@ -28,9 +29,15 @@ export function user(state = initState, action) {
       return {
         ...state,
         userInfo: action.payload.data,
-        message:action.payload.message,
+        message: action.payload.message,
       };
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        userInfo: '',
+        message: action.payload
+      }
     default:
-    return state;
+      return state;
   }
 }
