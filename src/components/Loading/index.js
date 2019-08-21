@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Spin } from 'antd';
 
-class LoadingCom extends Component {
+class Loading extends Component {
 	render() {
 		const style = {
 			color: '#999',
@@ -17,4 +17,4 @@ class LoadingCom extends Component {
 	}
 }
 
-export default LoadingCom;
+export default Loading;

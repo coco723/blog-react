@@ -91,7 +91,7 @@ class CommentList extends Component {
 
     const nowTime = new Date().getTime();
     if (nowTime - cacheTime < 60000) {
-      message.warning('您评论太过频繁，1 分钟后再来评论吧！', 1);
+      message.warning('您评论太过频繁，1分钟后再来评论吧！', 1);
       return;
     }
 

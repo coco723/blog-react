@@ -13,7 +13,7 @@ const loadingComponent = ({ error, pastDelay }) => {
 
 const config = [
     {
-      name: '/',
+      name: '/home',
       path: '/',
       exact: true,
       component: Loadable({
@@ -71,6 +71,10 @@ const config = [
         loading: loadingComponent,
         delay: 300,
       }),
+    },
+    {
+      exact: true,
+      render: () => <div>404 Not Found</div>
     },
 ];
 

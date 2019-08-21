@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import { ConnectedRouter } from 'connected-react-router';
-import { Route, Switch } from "react-router";
+import { Route, Switch } from "react-router-dom";
 import routers from '@/router/index.js';
 import Layout from '@/view/index';
 

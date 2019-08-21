@@ -9,7 +9,7 @@ import { isMobile, getQueryStringByName } from '@/utils/utils';
 import request from '@/utils/request';
 import urls from '@/utils/urls';
 import { loginSuccess, loginFailure } from '@/store/actions/user';
-import LoadingCom from '../Loading/index';
+import Loading from '../Loading/index';
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -218,7 +218,7 @@ class Nav extends Component {
                   style={{ lineHeight: '64px', borderBottom: 'none' }}
                 >
                   <Menu.Item key="9">
-                    <Link to="/">
+                    <Link to="/home">
                       <Icon type="home" theme="outlined" />
                       首页
                     </Link>
@@ -309,7 +309,7 @@ class Nav extends Component {
         {
           isLoading ? (
             <div style={{ marginTop: 100 }}>
-              <LoadingCom />
+              <Loading />
             </div>
           ) : ( '' )
         }

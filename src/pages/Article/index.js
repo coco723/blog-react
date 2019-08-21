@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { getQueryStringByName, getScrollTop, getWindowHeight, getDocumentHeight, lazyload, timestampToTime } from '../../utils/utils';
-import LoadingCom from '@/components/Loading';
+import Loading from '@/components/Loading/index';
 import https from '@/utils/request';
 import urls from '@/utils/urls';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { message, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import './index.less';
+import LoadEnd from '@/components/LoadEnd';
 
 
 class Articles extends Component {
@@ -121,8 +122,8 @@ class Articles extends Component {
           )
         }
         <ul className="note-list" id="list">{list}</ul>
-        {this.state.isLoading ? <LoadingCom /> : ''}
-        {this.state.isLoadEnd ? '' : <LoadingCom /> }
+        {this.state.isLoading ? <Loading /> : ''}
+        {this.state.isLoadEnd ? '' : <LoadEnd /> }
       </div>
     )
   }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { isMobile, getQueryStringByName, timestampToTime } from '@/utils/utils';
 import { Avatar, Icon, Button, message } from "antd";
 import logo from '@/assets/userLogo.jpeg';
-import LoadingCom from "@/components/Loading";
+import Loading from "@/components/Loading/index";
 import './article.less';
 import https from '@/utils/request';
 import urls from '@/utils/urls';
@@ -82,12 +82,12 @@ class ArticleDetail extends Component {
         const { desc, title } = data;
         document.title = title;
         document.getElementById('keywords').setAttribute('content', keyword);
-        document.getElementById('description').setAttribute('conten', desc);
+        document.getElementById('description').setAttribute('content', desc);
       } else {
         message.error(res.data.message, 1);
       }
     }).catch (err => {
-      message.error(err, 1);
+      console.log(err);
     })
   }
 
@@ -242,7 +242,7 @@ class ArticleDetail extends Component {
               <span className="clearfix" />
             </div>
           </div>
-          {this.state.isLoading ? <LoadingCom/> : ''}
+          {this.state.isLoading ? <Loading/> : ''}
           <div className="content">
             <div
               id="content"

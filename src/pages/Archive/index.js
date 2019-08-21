@@ -5,7 +5,7 @@ import { Timeline, Icon, message } from 'antd';
 import https from '@/utils/request';
 import urls from '@/utils/urls';
 import { timestampToTime } from '@/utils/utils';
-import LoadingCom from '@/components/Loading/index';
+import Loading from '@/components/Loading/index';
 
 class Archive extends Component {
   constructor(props) {
@@ -39,10 +39,11 @@ class Archive extends Component {
     }).then(res => {
       if (res.status === 200 && res.data.code === 0) {
         const data = res.data.data;
+        let num = pageNum;
         this.setState({
             list: list.concat(data.list),
             total: data.count,
-            pageNum: ++pageNum,
+            pageNum: ++num,
             isLoading: false,
         });
         if (total === list.length) {
@@ -94,7 +95,7 @@ class Archive extends Component {
       <div className = "archive">
         <Timeline> { list } </Timeline> 
         { 
-          this.state.isLoading ? <LoadingCom /> : ('')
+          this.state.isLoading ? <Loading /> : ('')
         } 
       </div>
     );
