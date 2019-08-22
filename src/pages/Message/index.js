@@ -92,7 +92,7 @@ class Message extends Component {
             style={{ marginBottom: 40 }}
             prefix={
               <Icon type="safety" style={{ color: 'rgba(0,0,0,.25)' }} />
-            } 
+            }
             name="email"
             placeholder="邮箱（不能为空）"
             value={email}
@@ -100,7 +100,7 @@ class Message extends Component {
           />
           <Input
             style={{ marginBottom: 40 }}
-            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} 
+            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             name="name"
             placeholder="名字（可为空）"
             value={name}
@@ -108,7 +108,7 @@ class Message extends Component {
           />
           <Input
             style={{ marginBottom: 40 }}
-            prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,.25)' }} />} 
+            prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,.25)' }} />}
             name="phone"
             placeholder="手机（可为空）"
             value={phone}
@@ -116,7 +116,7 @@ class Message extends Component {
           />
           <Input
             style={{ marginBottom: 40 }}
-            prefix={<Icon type="message" style={{ color: 'rgba(0,0,0,.25)' }} />} 
+            prefix={<Icon type="message" style={{ color: 'rgba(0,0,0,.25)' }} />}
             name="content"
             placeholder="留言内容（不能为空）"
             value={content}

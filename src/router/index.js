@@ -9,7 +9,7 @@ const loadingComponent = ({ error, pastDelay }) => {
     return <div />
   }
   return null;
-} 
+}
 
 const config = [
     {

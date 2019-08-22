@@ -47,7 +47,7 @@ class Register extends Component {
     ); //正则表达式
     if (!this.state.email) {
       message.warn('邮箱不能为空！');
-    } 
+    }
     if (!reg.test(this.state.email)) {
       message.warn('请输入格式正确的邮箱！');
     }

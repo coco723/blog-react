@@ -18,8 +18,8 @@ class Login extends Component {
     https.post(urls.login, {
       email,
       password,
-    },{ 
-      withCredentials: true 
+    },{
+      withCredentials: true
     }).then(res => {
       this.setState({
         email: '',
@@ -49,16 +49,16 @@ class Login extends Component {
     );
     if (!this.state.email) {
       message.warn('邮箱不能为空！');
-    } 
+    }
     if (!reg.test(this.state.email)) {
       message.warn('请输入格式正确的邮箱！');
-    } 
+    }
     if (!this.state.password) {
       message.warn('密码不能为空');
     }
     this.login(this.state);
   }
-  
+
   handleOAuth = () => {
     // 保存授权前的页面链接内容
     const preventHistory = {

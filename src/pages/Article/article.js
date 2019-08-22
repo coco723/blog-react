@@ -101,7 +101,7 @@ class ArticleDetail extends Component {
     https.post(urls.likeArticle, {
       id: info._id,
       user_id,
-    }, { 
+    }, {
       withCredentials: true
     }).then(res => {
       if (res.status === 200 && res.data.code === 0) {
@@ -140,7 +140,7 @@ class ArticleDetail extends Component {
     if (!window.sessionStorage.userInfo) {
       message.warning('登陆后才能点赞，请先登陆！', 1);
       return;
-    } 
+    }
     const userInfo = JSON.parse(window.sessionStorage.userInfo);
     const userId = userInfo._id;
     this.setState({
@@ -266,7 +266,7 @@ class ArticleDetail extends Component {
           <div className="heart">
             <Button type="danger" size="large" icon="likes" loading={this.state.isLoading} onClick={this.likeArticle}>点赞</Button>
           </div>
-          <Comment 
+          <Comment
             content={content}
             isSubmitLoading={this.state.isSubmitLoading}
             handleChange={this.handleChange}
