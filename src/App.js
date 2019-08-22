@@ -1,13 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import { ConnectedRouter } from 'connected-react-router';
-import { Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import routers from '@/router/index.js';
 import Layout from '@/view/index';
 
 const App = ({ history }) => {
   return (
-    <ConnectedRouter history={history}>
+    <Router history={history}>
       <Switch>
         <Layout>
           {routers.map((r, key) => (
@@ -20,7 +19,7 @@ const App = ({ history }) => {
           ))}
         </Layout>
       </Switch>
-    </ConnectedRouter>
+    </Router>
   )
 }
 

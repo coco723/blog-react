@@ -231,7 +231,7 @@ class Nav extends Component {
                   style={{ lineHeight: '64px', borderBottom: 'none' }}
                 >
                   <Menu.Item key="9">
-                    <Link to="/home">
+                    <Link to="/">
                       <Icon type="home" theme="twoTone" />
                       首页
                     </Link>

@@ -16,7 +16,7 @@ class Layouts extends Component {
   render() {
     const pathName = this.props.location.pathname;
     const isShowSlider = () => {
-      if ((pathName === '/home' || pathName === '/articleDetail') && !isMobile()) {
+      if ((pathName === '/' || pathName === '/articleDetail') && !isMobile()) {
         return false;
       }
       return true;
