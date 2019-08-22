@@ -1171,7 +1171,7 @@ class Index extends Component {
         d.scrollHeight,
         d.clientHeight,
       );
-      canvas.width = fullw;
+      canvas.width = fullw || "100%";
       canvas.height = fullh;
     }
 

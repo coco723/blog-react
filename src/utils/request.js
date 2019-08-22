@@ -16,7 +16,6 @@ if (process.env.NODE_ENV === 'development') {
 
 service.interceptors.request.use(
   config => {
-    console.log('config = = =', config);
     return config;
   },
   error => {

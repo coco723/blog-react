@@ -1,6 +1,9 @@
 import {
   LOGIN_SUCCESS,
-  LOGIN_FAILURE
+  LOGIN_FAILURE,
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE,
+  LOGOUT
 } from '../../types';
 
 const initState = {
@@ -31,7 +34,20 @@ export function user(state = initState, action) {
         userInfo: action.payload.data,
         message: action.payload.message,
       };
+    case LOGOUT:
+    return {
+      userInfo: '',
+      message: '',
+      refresh: 0,
+    };
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        userInfo: '',
+        message: action.payload.message,
+      }
     case LOGIN_FAILURE:
+    case REGISTER_FAILURE:
       return {
         ...state,
         userInfo: '',
