@@ -7,4 +7,5 @@ before_install:
 install:
   - npminstall
 script:
+  - npm build
   - npm start
